@@ -1,11 +1,9 @@
 //test comment
 
+
 package com.example.clicker.ui.login;
 
 import android.app.Activity;
-
-
-package com.example.clicker.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
