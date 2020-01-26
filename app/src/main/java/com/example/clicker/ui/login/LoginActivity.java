@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.login).setOnClickListener(this);
         findViewById(R.id.registerAsStudent).setOnClickListener(this);
         findViewById(R.id.registerAsTeacher).setOnClickListener(this);
-        System.out.println("AAAAAAAAAAAAAAAA");
+        //System.out.println("AAAAAAAAAAAAAAAA");
 
     }
     public void userLogin(){
