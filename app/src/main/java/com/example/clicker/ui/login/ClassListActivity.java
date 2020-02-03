@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import com.example.clicker.R;
 import com.google.firebase.database.DatabaseReference;
@@ -17,7 +18,12 @@ public class ClassListActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_list);
-        addToDB();
+        final Button addClassButton = findViewById(R.id.addClass);
+        addClassButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                addClass(v);
+            }
+        });
     }
 
     void addToDB()
@@ -52,8 +58,7 @@ public class ClassListActivity extends AppCompatActivity {
                         //ADD BACKEND TO STORE IN DB
                     }
                 })
-                .setNegativeButton("C" +
-                                "ancel",
+                .setNegativeButton("C" +"ancel",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 dialog.cancel();
