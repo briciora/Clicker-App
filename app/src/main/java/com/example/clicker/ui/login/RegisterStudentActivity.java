@@ -15,10 +15,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterStudentActivity extends AppCompatActivity implements View.OnClickListener {
     EditText firstName, lastName, studentID, emailId, password, confirmPassword;
     FirebaseAuth mFirebaseAuth;
+    private DatabaseReference myRef;
+    Students students;
+    //FirebaseDatabase database;
+    //DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,16 +37,23 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
         password = findViewById(R.id.Password);
         confirmPassword = findViewById(R.id.ConfirmPassword);
         findViewById(R.id.Register).setOnClickListener(this);
+        students = new Students();
         mFirebaseAuth = FirebaseAuth.getInstance();
+        myRef = FirebaseDatabase.getInstance().getReference().child("Students");
+
+         /*database = FirebaseDatabase.getInstance();
+         myRef = database.getReference("message");
+
+        myRef.setValue("Hello, World!");*/
     }
 
     public void registerStudent() {
-        String firName = firstName.getText().toString();
-        String lasName = lastName.getText().toString();
-        String studID = studentID.getText().toString();
-        String email = emailId.getText().toString();
-        String pwd = password.getText().toString();
-        String confPass = confirmPassword.getText().toString();
+        final String firName = firstName.getText().toString();
+        final String lasName = lastName.getText().toString();
+        final String studID = studentID.getText().toString();
+        final String email = emailId.getText().toString();
+        final String pwd = password.getText().toString();
+        final String confPass = confirmPassword.getText().toString();
         if (firName.isEmpty()){
             firstName.setError("Please enter your first name");
             firstName.requestFocus();
@@ -65,6 +78,9 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
             confirmPassword.setError("Please confirm your password");
             confirmPassword.requestFocus();
         }
+        else if (!(pwd.equals(confPass))) {
+            Toast.makeText(RegisterStudentActivity.this, "Passwords Are Not The Same", Toast.LENGTH_SHORT).show();
+        }
         else if (email.isEmpty() && pwd.isEmpty()) {
             Toast.makeText(RegisterStudentActivity.this, "Fields Are Empty", Toast.LENGTH_SHORT).show();
         }
@@ -73,6 +89,13 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
+                        students.setFirstName(firName);
+                        students.setLastName(lasName);
+                        students.setStudentID(Long.parseLong(studentID.getText().toString()));
+                        students.setEmail(email);
+                        students.setPassword(pwd);
+                        students.setConfirmPassword(confPass);
+                        myRef.child(studID).setValue(students);
                         Toast.makeText(getApplicationContext(),"User successfully registered", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(RegisterStudentActivity.this, LoginActivity.class);
                         startActivity(intent);
