@@ -32,7 +32,6 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_register_student);
         firstName = findViewById(R.id.FirstName);
         lastName = findViewById(R.id.LastName);
-        studentID = findViewById(R.id.StudentID);
         emailId = findViewById(R.id.Email);
         password = findViewById(R.id.Password);
         confirmPassword = findViewById(R.id.ConfirmPassword);
@@ -40,18 +39,13 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
         students = new Students();
         mFirebaseAuth = FirebaseAuth.getInstance();
         myRef = FirebaseDatabase.getInstance().getReference().child("Students");
-
-         /*database = FirebaseDatabase.getInstance();
-         myRef = database.getReference("message");
-
-        myRef.setValue("Hello, World!");*/
     }
 
     public void registerStudent() {
         final String firName = firstName.getText().toString();
         final String lasName = lastName.getText().toString();
-        final String studID = studentID.getText().toString();
         final String email = emailId.getText().toString();
+        final String userName = email.split("@")[0];
         final String pwd = password.getText().toString();
         final String confPass = confirmPassword.getText().toString();
         if (firName.isEmpty()){
@@ -61,10 +55,6 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
         else if (lasName.isEmpty()){
             lastName.setError("Please enter your last name");
             lastName.requestFocus();
-        }
-        else if (studID.isEmpty()){
-            studentID.setError("Please enter your student ID");
-            studentID.requestFocus();
         }
        else if (email.isEmpty()) {
             emailId.setError("Please enter an email");
@@ -84,18 +74,17 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
         else if (email.isEmpty() && pwd.isEmpty()) {
             Toast.makeText(RegisterStudentActivity.this, "Fields Are Empty", Toast.LENGTH_SHORT).show();
         }
-        else if (!(firName.isEmpty() && lasName.isEmpty() && studID.isEmpty() && email.isEmpty() && pwd.isEmpty() && confPass.isEmpty())) {
+        else if (!(firName.isEmpty() && lasName.isEmpty() &&  email.isEmpty() && pwd.isEmpty() && confPass.isEmpty())) {
             mFirebaseAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(RegisterStudentActivity.this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
                         students.setFirstName(firName);
                         students.setLastName(lasName);
-                        students.setStudentID(Long.parseLong(studentID.getText().toString()));
                         students.setEmail(email);
                         students.setPassword(pwd);
                         students.setConfirmPassword(confPass);
-                        myRef.child(studID).setValue(students);
+                        myRef.child(userName).setValue(students);
                         Toast.makeText(getApplicationContext(),"User successfully registered", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(RegisterStudentActivity.this, LoginActivity.class);
                         startActivity(intent);

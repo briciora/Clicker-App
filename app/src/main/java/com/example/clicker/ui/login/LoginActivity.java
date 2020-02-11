@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText emailId, password;
     FirebaseAuth mFirebaseAuth;
+    boolean identity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,11 +45,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.login).setOnClickListener(this);
         findViewById(R.id.registerAsStudent).setOnClickListener(this);
         findViewById(R.id.registerAsTeacher).setOnClickListener(this);
-        //System.out.println("AAAAAAAAAAAAAAAA");
 
     }
     public void userLogin(){
        String email = emailId.getText().toString();
+       final String userName = email.split("@")[0];
        String pwd = password.getText().toString();
        if(email.isEmpty()){
            emailId.setError("Please enter your email");
@@ -66,9 +67,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                @Override
                public void onComplete(@NonNull Task<AuthResult> task) {
                    if(task.isSuccessful()){
-                       //PUT NEW ACTIVITY HERE
+                       DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                       ref.child("Students").child(userName).addValueEventListener(new ValueEventListener() {
+                           @Override
+                           public void onDataChange(DataSnapshot dataSnapshot) {
+                               if(dataSnapshot.exists()){
+                                   Toast.makeText(LoginActivity.this, "You are a student", Toast.LENGTH_SHORT).show();
+                                   identity = true;
+                               } else {
+                                   Toast.makeText(LoginActivity.this, "You are a teacher", Toast.LENGTH_SHORT).show();
+                                   identity = false;
+                               }
+                           }
+
+                           @Override
+                           public void onCancelled(DatabaseError databaseError) {
+
+                           }
+                       });
                        Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                        Intent intent = new Intent(LoginActivity.this, ClassListActivity.class);
+                       intent.putExtra("idValue", identity);
                        startActivity(intent);
                    }
                    else{
@@ -86,23 +105,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login:
-                /*DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                ref.child("Students").child("email").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
-                            Toast.makeText(LoginActivity.this, "STUDENT CLASS", Toast.LENGTH_SHORT).show();
-                            // use "username" already exists
-                        } else {
-                            // "username" does not exist yet.
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });*/
                 userLogin();
                 break;
             case R.id.registerAsStudent:
