@@ -3,16 +3,6 @@ package com.example.clicker.ui.login;
 public class Teachers {
     private String firstName;
     private String lastName;
-    private String courseID;
-
-    public String getCourseID() {
-        return courseID;
-    }
-
-    public void setCourseID(String courseID) {
-        this.courseID = courseID;
-    }
-
     private String email;
     private String password;
     private String confirmPassword;

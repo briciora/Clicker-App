@@ -29,7 +29,6 @@ public class RegisterTeacherActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_register_teacher);
         firstName = findViewById(R.id.FirstName);
         lastName = findViewById(R.id.LastName);
-        courseID = findViewById(R.id.courseID);
         emailId = findViewById(R.id.Email);
         password = findViewById(R.id.Password);
         confirmPassword = findViewById(R.id.ConfirmPassword);
@@ -41,8 +40,8 @@ public class RegisterTeacherActivity extends AppCompatActivity implements View.O
     public void registerTeacher() {
         final String firName = firstName.getText().toString();
         final String lasName = lastName.getText().toString();
-        final String cID = courseID.getText().toString();
         final String email = emailId.getText().toString();
+        final String userName = email.split("@")[0];
         final String pwd = password.getText().toString();
         final String confPass = confirmPassword.getText().toString();
         if (firName.isEmpty()){
@@ -51,10 +50,6 @@ public class RegisterTeacherActivity extends AppCompatActivity implements View.O
         }
         else if (lasName.isEmpty()){
             lastName.setError("Please enter your last name");
-            lastName.requestFocus();
-        }
-        else if (cID.isEmpty()){
-            lastName.setError("Please enter your course ID");
             lastName.requestFocus();
         }
         else if (email.isEmpty()) {
@@ -82,11 +77,10 @@ public class RegisterTeacherActivity extends AppCompatActivity implements View.O
                     if (task.isSuccessful()){
                         teachers.setFirstName(firName);
                         teachers.setLastName(lasName);
-                        teachers.setCourseID(cID);
                         teachers.setEmail(email);
                         teachers.setPassword(pwd);
                         teachers.setConfirmPassword(confPass);
-                        myRef.child(cID).setValue(teachers);
+                        myRef.child(userName).setValue(teachers);
                         Toast.makeText(getApplicationContext(),"User successfully registered", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(RegisterTeacherActivity.this, LoginActivity.class);
                         startActivity(intent);
