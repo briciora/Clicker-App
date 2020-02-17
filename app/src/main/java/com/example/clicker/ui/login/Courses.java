@@ -3,15 +3,15 @@ package com.example.clicker.ui.login;
 import java.util.Date;
 
 public class Courses {
-    private int courseNum;
+    private String courseNum;
     private String courseName;
-    private Date courseTime;
+    //private Date courseTime;
 
-    public int getCourseNum() {return courseNum;}
+    public String getCourseNum() {return courseNum;}
     public String getCourseName(){return courseName;}
-    public Date getCourseTime(){return courseTime;}
+    //public Date getCourseTime(){return courseTime;}
 
-    public void setCourseNum(int courseNum){
+    public void setCourseNum(String courseNum){
         this.courseNum = courseNum;
     }
 
@@ -19,8 +19,9 @@ public class Courses {
         this.courseName = courseName;
     }
 
+    /*
     public void setCourseTime(Date courseTime){
         this.courseTime = courseTime;
     }
-
+    */
 }
