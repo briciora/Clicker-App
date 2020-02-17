@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.clicker.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import androidx.appcompat.app.AlertDialog;
@@ -18,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ClassListActivity extends AppCompatActivity {
     private static final String tag = "IDENTITY";
+    FirebaseAuth mFirebaseAuth;
+    private DatabaseReference myRef;
+    Courses courses;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,14 +35,11 @@ public class ClassListActivity extends AppCompatActivity {
         });
 
         Boolean identity = getIntent().getExtras().getBoolean("idValue");
-        //Log.d(tag, Boolean.toString(identity));
-    }
+        courses = new Courses();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        myRef = FirebaseDatabase.getInstance().getReference().child("Courses");
 
-    void addToDB()
-    {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Courses");
-        myRef.setValue("Databases");
+        //Log.d(tag, Boolean.toString(identity))
     }
 
     void addClass(View view)
@@ -60,9 +62,10 @@ public class ClassListActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
                         final String name = courseName.getText().toString();
-                        final String id_ = courseID.getText().toString();
+                        final String identification = courseID.getText().toString();
 
                         //ADD BACKEND TO STORE IN DB
+                        myRef.setValue(courses);
                     }
                 })
                 .setNegativeButton("C" +"ancel",
