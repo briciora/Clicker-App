@@ -63,9 +63,10 @@ public class ClassListActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog,int id) {
                         final String name = courseName.getText().toString();
                         final String identification = courseID.getText().toString();
-
+                        courses.setCourseNum(identification);//LINES 66-69 ARE THE CHANGES I MADE -BRITTNEY
+                        courses.setCourseName(name);
                         //ADD BACKEND TO STORE IN DB
-                        myRef.setValue(courses);
+                        myRef.child(identification).setValue(courses);
                     }
                 })
                 .setNegativeButton("C" +"ancel",
