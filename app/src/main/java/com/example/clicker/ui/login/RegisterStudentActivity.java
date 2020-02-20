@@ -23,8 +23,6 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
     FirebaseAuth mFirebaseAuth;
     private DatabaseReference myRef;
     Students students;
-    //FirebaseDatabase database;
-    //DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
