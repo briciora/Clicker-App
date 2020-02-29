@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText emailId, password;
     FirebaseAuth mFirebaseAuth;
     boolean identity;
+    ProgressBar progressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mFirebaseAuth = FirebaseAuth.getInstance();
         emailId = findViewById(R.id.email);
         password = findViewById(R.id.password);
+        progressBar = findViewById(R.id.loading);
         findViewById(R.id.login).setOnClickListener(this);
         findViewById(R.id.registerAsStudent).setOnClickListener(this);
         findViewById(R.id.registerAsTeacher).setOnClickListener(this);
@@ -63,9 +65,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
            Toast.makeText(LoginActivity.this, "Fields Are Empty", Toast.LENGTH_SHORT).show();
        }
        else if(!(email.isEmpty() && pwd.isEmpty())){
+           progressBar.setVisibility(View.VISIBLE);
            mFirebaseAuth.signInWithEmailAndPassword(email,pwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                @Override
                public void onComplete(@NonNull Task<AuthResult> task) {
+                   progressBar.setVisibility(View.GONE);
                    if(task.isSuccessful()){
                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                        ref.child("Students").child(userName).addValueEventListener(new ValueEventListener() {
