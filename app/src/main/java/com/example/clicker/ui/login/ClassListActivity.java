@@ -156,7 +156,7 @@ public class ClassListActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     // marshal dataSnapshot from JSON object into java class
-                                    Teacher me = dataSnapshot.getValue(Teacher.class);
+                                    Teacher me = (Teacher) dataSnapshot.getValue(Teacher.class);
 
                                     // set teacher name for course as the name bound to current user account
                                     // so as to not cause any issues (async sensitive)
