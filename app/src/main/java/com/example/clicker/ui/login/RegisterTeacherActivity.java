@@ -18,11 +18,15 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RegisterTeacherActivity extends AppCompatActivity implements View.OnClickListener{
     EditText firstName, lastName, emailId, courseID, password, confirmPassword;
     FirebaseAuth mFirebaseAuth;
     private DatabaseReference myRef;
-    Teachers teachers;
+    Teacher teacher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +37,7 @@ public class RegisterTeacherActivity extends AppCompatActivity implements View.O
         password = findViewById(R.id.Password);
         confirmPassword = findViewById(R.id.ConfirmPassword);
         findViewById(R.id.Register).setOnClickListener(this);
-        teachers = new Teachers();
+        teacher = new Teacher();
         mFirebaseAuth = FirebaseAuth.getInstance();
         myRef = FirebaseDatabase.getInstance().getReference().child("Teachers");
     }
@@ -75,12 +79,10 @@ public class RegisterTeacherActivity extends AppCompatActivity implements View.O
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
-                        teachers.setFirstName(firName);
-                        teachers.setLastName(lasName);
-                        teachers.setEmail(email);
-                        teachers.setPassword(pwd);
-                        teachers.setConfirmPassword(confPass);
-                        myRef.child(userName).setValue(teachers);
+                        teacher.setFirstName(firName);
+                        teacher.setLastName(lasName);
+                        teacher.setEmailAddress(email);
+                        myRef.child(userName).setValue(teacher);
                         Toast.makeText(getApplicationContext(),"User successfully registered", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(RegisterTeacherActivity.this, LoginActivity.class);
                         startActivity(intent);

@@ -33,7 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText emailId, password;
     FirebaseAuth mFirebaseAuth;
-    boolean identity;
+    boolean is_teacher;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,22 +62,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
        else if(email.isEmpty() && pwd.isEmpty()){
            Toast.makeText(LoginActivity.this, "Fields Are Empty", Toast.LENGTH_SHORT).show();
        }
-       else if(!(email.isEmpty() && pwd.isEmpty())){
+       else if(!(email.isEmpty() && pwd.isEmpty())) {
            mFirebaseAuth.signInWithEmailAndPassword(email,pwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                @Override
                public void onComplete(@NonNull Task<AuthResult> task) {
                    if(task.isSuccessful()){
+                       // user is in the system. check whether they are teacher or student
                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                       ref.child("Students").child(userName).addValueEventListener(new ValueEventListener() {
+                       ref.child("Students").child(userName).addListenerForSingleValueEvent(new ValueEventListener() {
                            @Override
                            public void onDataChange(DataSnapshot dataSnapshot) {
                                if(dataSnapshot.exists()){
+                                   // user is in the database as a student already. log them in, notify,
+                                   // and store their identity status
                                    Toast.makeText(LoginActivity.this, "You are a student", Toast.LENGTH_SHORT).show();
-                                   identity = true;
+                                   is_teacher = false;
                                } else {
+                                   // user is in the database as a teacher already. log them in, notify,
+                                   // and store their identity status
                                    Toast.makeText(LoginActivity.this, "You are a teacher", Toast.LENGTH_SHORT).show();
-                                   identity = false;
+                                   is_teacher = true;
                                }
+
+                               // intent must be built inside this scope due to asynchronous nature
+                               Intent intent = new Intent(LoginActivity.this, ClassListActivity.class);
+                               intent.putExtra("is_teacher", is_teacher);
+                               intent.putExtra("username", userName);
+                               startActivity(intent);
                            }
 
                            @Override
@@ -85,12 +96,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                            }
                        });
+                       // user logged in. notify them
                        Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                       Intent intent = new Intent(LoginActivity.this, ClassListActivity.class);
-                       intent.putExtra("idValue", identity);
-                       startActivity(intent);
+
                    }
                    else{
+                       // user not in the system. notify them and display reason
                        Toast.makeText(LoginActivity.this, "Login Not Successful", Toast.LENGTH_SHORT).show();
                        Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                    }
