@@ -22,7 +22,7 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
     EditText firstName, lastName, studentID, emailId, password, confirmPassword;
     FirebaseAuth mFirebaseAuth;
     private DatabaseReference myRef;
-    Students students;
+    Student student;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
         password = findViewById(R.id.Password);
         confirmPassword = findViewById(R.id.ConfirmPassword);
         findViewById(R.id.Register).setOnClickListener(this);
-        students = new Students();
+        student = new Student();
         mFirebaseAuth = FirebaseAuth.getInstance();
         myRef = FirebaseDatabase.getInstance().getReference().child("Students");
     }
@@ -54,7 +54,7 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
             lastName.setError("Please enter your last name");
             lastName.requestFocus();
         }
-       else if (email.isEmpty()) {
+        else if (email.isEmpty()) {
             emailId.setError("Please enter an email");
             emailId.requestFocus();
         }
@@ -77,12 +77,10 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
-                        students.setFirstName(firName);
-                        students.setLastName(lasName);
-                        students.setEmail(email);
-                        students.setPassword(pwd);
-                        students.setConfirmPassword(confPass);
-                        myRef.child(userName).setValue(students);
+                        student.setFirstName(firName);
+                        student.setLastName(lasName);
+                        student.setEmailAddress(email);
+                        myRef.child(userName).setValue(student);
                         Toast.makeText(getApplicationContext(),"User successfully registered", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(RegisterStudentActivity.this, LoginActivity.class);
                         startActivity(intent);
@@ -109,4 +107,3 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
         }
     }
 }
-
