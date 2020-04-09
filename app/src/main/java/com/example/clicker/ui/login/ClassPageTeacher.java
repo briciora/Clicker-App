@@ -28,7 +28,7 @@ public class ClassPageTeacher extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.startSession:
-                //      startActivity(new Intent(this, InSessionTeacher.class));
+                startActivity(new Intent(this, TeacherSession.class));
                 break;
             case R.id.addQuestion:
                 startActivity(new Intent(this, CreateQuestion.class));
