@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 }
 
                                 // intent must be built inside this scope due to asynchronous nature
-                                Intent intent = new Intent(LoginActivity.this, ClassPageTeacher.class/*ClassListActivity.class*/);
+                                Intent intent = new Intent(LoginActivity.this, ClassListActivity.class);
                                 intent.putExtra("is_teacher", is_teacher);
                                 intent.putExtra("username", userName);
                                 startActivity(intent);
