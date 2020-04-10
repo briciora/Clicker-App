@@ -12,8 +12,10 @@
     <string name="title_activity_home_page_teacher">HomePageTeacher</string>
     <string name="title_activity_home_page_student">HomePageStudent</string>
 
-    <string-array name="question_type">
-        <item>Multiple Choice</item>
-        <item>Short Answer</item>
+    <string-array name="correctAnswers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
     </string-array>
 </resources>

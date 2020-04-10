@@ -2,17 +2,12 @@ package com.example.clicker.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.View;
-
 import com.example.clicker.R;
 
 public class ClassPageTeacher extends AppCompatActivity implements View.OnClickListener {
-
     //  TextView className;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
