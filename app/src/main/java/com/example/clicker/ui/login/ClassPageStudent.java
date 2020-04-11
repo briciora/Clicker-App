@@ -1,5 +1,6 @@
 package com.example.clicker.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,9 @@ public class ClassPageStudent extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-
+        if(v.getId() == R.id.joinSession)
+        {
+            startActivity(new Intent(this, StudentSession.class));
+        }
     }
 }

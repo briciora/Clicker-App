@@ -1,9 +1,11 @@
 package com.example.clicker.ui.login;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -117,6 +119,26 @@ public class ClassListActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 System.out.println("Read failed. Error code: " + databaseError.getCode());
+            }
+        });
+
+        //when a a class in the list is clicked, launch the next activity
+        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(is_teacher)
+                {
+                    //get class name and put in intent
+
+                    Intent teacher_class_page = new Intent(ClassListActivity.this, ClassPageTeacher.class);
+                    startActivity(teacher_class_page);
+                }
+                else
+                {
+                    //get class name and put in intent
+                    Intent student_class_page = new Intent(ClassListActivity.this, ClassPageStudent.class);
+                    startActivity(student_class_page);
+                }
             }
         });
     }
