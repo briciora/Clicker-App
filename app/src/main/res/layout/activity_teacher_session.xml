@@ -4,20 +4,48 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/numResponsesTitle"
-        android:text="Number of Responses:"
+        android:layout_marginTop="70dp"
+        android:textSize="30dp"
+        android:textColor="@color/colorAccent"
+        android:text="Session"
         android:layout_gravity="center" />
-    <TextView
-        android:layout_width="wrap_content"
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/numResponses" />
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp">
+
+        <TextView
+            android:id="@+id/numResponses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:text="Number of Responses: "
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number:"
+            android:textSize="20dp" />
+    </LinearLayout>
+
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="350dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:id="@+id/end"
+        android:background="@color/colorAccent"
+        android:textColor="@color/white"
         android:text="END SESSION"
         android:layout_gravity="center" />
 

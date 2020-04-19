@@ -4,21 +4,68 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:textSize="30dp"
+        android:textColor="@color/colorAccent"
+        android:text="Session"
+        android:layout_gravity="center" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textSize="25dp"
+        android:text="Question"
         android:id="@+id/question" />
 
-    <RadioGroup
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/answerChoices"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+        <RadioButton
+            android:id="@+id/answerA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Answer Choice for A"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton
+            android:id="@+id/answerB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Answer Choice for B"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton
+            android:id="@+id/answerC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Answer Choice for C"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton
+            android:id="@+id/answerD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Answer Choice for D"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/exit"
-        android:text="EXIT SESSION"
-        android:layout_gravity="center"/>
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/colorAccent"
+        android:textColor="@color/white"
+        android:text="Submit" />
 
 
 </LinearLayout>

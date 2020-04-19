@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.clicker.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,7 +43,7 @@ public class ClassListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_class_list);
-        final Button addClassButton = findViewById(R.id.addClass);
+        final FloatingActionButton addClassButton = findViewById(R.id.addClass);
         addClassButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 addClass(v);
