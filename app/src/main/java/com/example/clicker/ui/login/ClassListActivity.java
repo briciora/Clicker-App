@@ -1,15 +1,20 @@
 package com.example.clicker.ui.login;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.clicker.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,14 +39,14 @@ public class ClassListActivity extends AppCompatActivity {
     private String course_hash;
     private ListView list_view;
     private ArrayList<String> my_course_ids;
-    private CustomListAdapter list_adapter;
+    private CustomListAdapter<Course> list_adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_class_list);
-        final Button addClassButton = findViewById(R.id.addClass);
+        final FloatingActionButton addClassButton = findViewById(R.id.addClass);
         addClassButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 addClass(v);
@@ -97,13 +103,32 @@ public class ClassListActivity extends AppCompatActivity {
                         List<Course> my_courses = new ArrayList<Course>();
                         for (DataSnapshot snapshotChild : dataSnapshot.getChildren()) {
                             Course c = (Course) snapshotChild.getValue(Course.class);
-                            if (me.getMap().containsKey(Long.toString(c.generateCourseHash()))) {
+                            if (me.getMap().containsKey(Long.toString(Course.generateCourseHash(c.getCourseId(), c.getTeacher())))) {
                                 my_courses.add((Course) snapshotChild.getValue(Course.class));
                             }
                         }
 
                         // set list adapter on listview
-                        list_adapter = new CustomListAdapter(ClassListActivity.this, R.layout.listview_item_class, my_courses);
+                        list_adapter = new CustomListAdapter<Course>(ClassListActivity.this, R.layout.listview_item_class, my_courses) {
+                            @Override
+                            public View getView(int position, View convert_view, ViewGroup parent) {
+                                View view = initView(convert_view);
+
+                                Course c = getItem(position);
+
+                                if (c != null) {
+                                    TextView tv1 = (TextView) view.findViewById(R.id.Item1);
+                                    TextView tv2 = (TextView) view.findViewById(R.id.Item2);
+                                    if (tv1 != null) {
+                                        tv1.setText(c.getCourseName() + " (" + c.getCourseId() + ")");
+                                    }
+                                    if (tv2 != null) {
+                                        tv2.setText(c.getTeacher());
+                                    }
+                                }
+                                return view;
+                            }
+                        };
                         list_view.setAdapter(list_adapter);
                     }
 
@@ -117,6 +142,26 @@ public class ClassListActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 System.out.println("Read failed. Error code: " + databaseError.getCode());
+            }
+        });
+
+        //when a a class in the list is clicked, launch the next activity
+        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //get class name and username and put it in an intent: wd
+                Intent intent = new Intent(ClassListActivity.this, is_teacher ? ClassPageTeacher.class : ClassPageStudent.class);
+                TextView classNameTextView = (TextView)view.findViewById(R.id.Item1);
+                TextView teacherNameTextView = (TextView)view.findViewById(R.id.Item2);
+                String course_name = classNameTextView.getText().toString();
+                String teacherName = teacherNameTextView.getText().toString();
+                String course_id = course_name.substring(course_name.length() - 9, course_name.length() - 1);
+
+                intent.putExtra("is_teacher", is_teacher);
+                intent.putExtra("username", username);
+                intent.putExtra("course_name", course_name);
+                intent.putExtra( "course_hash", Long.toString(Course.generateCourseHash(course_id, teacherName)));
+                startActivity(intent);
             }
         });
     }
@@ -156,7 +201,7 @@ public class ClassListActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     // marshal dataSnapshot from JSON object into java class
-                                    Teacher me = dataSnapshot.getValue(Teacher.class);
+                                    Teacher me = (Teacher) dataSnapshot.getValue(Teacher.class);
 
                                     // set teacher name for course as the name bound to current user account
                                     // so as to not cause any issues (async sensitive)
@@ -164,11 +209,12 @@ public class ClassListActivity extends AppCompatActivity {
                                     course_to_add.setTeacher(teacher_name);
 
                                     // generate course hash (seeded from the course ID and teacher name)
-                                    course_hash = Long.toString(course_to_add.generateCourseHash());
+                                    course_hash = Long.toString(Course.generateCourseHash(course_to_add.getCourseId(), course_to_add.getTeacher()));
 
                                     // if we are a teacher, create a new course as child of the "Courses" node in db
                                     // with course hash as node identifier
                                     myRef.child("Courses").child(course_hash).setValue(course_to_add);
+                                    myRef.child("Sessions").child(course_hash).setValue(new Session(course_to_add));
 
 
 //                                  // now update teacher's list of course hashes for the courses they teach in db
@@ -187,7 +233,7 @@ public class ClassListActivity extends AppCompatActivity {
                             course_to_add.setTeacher(teacher_name);
 
                             // generate course hash (seeded from the course ID and teacher name)
-                            course_hash = Long.toString(course_to_add.generateCourseHash());
+                            course_hash = Long.toString(Course.generateCourseHash(course_to_add.getCourseId(), course_to_add.getTeacher()));
 
                             // if we are a student, calculate unique hash for course
                             // so that we can check to see if class exists as a child of "Courses" node in db

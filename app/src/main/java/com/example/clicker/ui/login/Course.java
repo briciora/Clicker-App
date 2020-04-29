@@ -1,11 +1,24 @@
 package com.example.clicker.ui.login;
 
 import java.util.Date;
+import java.util.Map;
 
 public class Course {
     private String courseId;
     private String courseName;
     private String teacher;
+
+    Course() {
+        this.courseId = "";
+        this.courseName = "";
+        this.teacher = "";
+    }
+
+    Course(Course other) {
+        this.courseId = other.courseId;
+        this.courseName = other.courseName;
+        this.teacher = other.teacher;
+    }
 
     public String getCourseId() { return this.courseId; }
 
@@ -23,7 +36,7 @@ public class Course {
 
     public void setTeacher(String teacher) { this.teacher = teacher; }
 
-    public long generateCourseHash() {
+    public static long generateCourseHash(String courseId, String teacher) {
         String string_to_hash = courseId + teacher;
         long hash = 0;
         int p = 11;

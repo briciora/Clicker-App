@@ -54,7 +54,7 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
             lastName.setError("Please enter your last name");
             lastName.requestFocus();
         }
-       else if (email.isEmpty()) {
+        else if (email.isEmpty()) {
             emailId.setError("Please enter an email");
             emailId.requestFocus();
         }
@@ -107,4 +107,3 @@ public class RegisterStudentActivity extends AppCompatActivity implements View.O
         }
     }
 }
-

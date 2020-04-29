@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/addClass"
-        android:layout_margin="40dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ADD CLASS"
-        android:layout_gravity="center" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:fontFamily="sans-serif"
+        android:layout_marginTop="70dp"
         android:paddingTop="10dp"
-        android:text="Your Classes:"
-        android:textSize="24sp"
+        android:text="Classes"
+        android:textColor="@color/colorAccent"
+        android:textSize="30dp"
         android:textStyle="bold" />
 
-    <ListView
-        android:id="@+id/listOfClasses"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/listOfClasses"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/colorAccent"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addClass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_add_black_24dp" />
+    </FrameLayout>
+
 </LinearLayout>
